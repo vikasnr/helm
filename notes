@@ -1,0 +1,74 @@
+
+
+sudo systemctl start mongod
+
+Frontend
+
+
+cd helm-fronend
+yarn dev
+
+cd helm
+helm-server
+
+
+helm-run \
+    --run-specs boolq:model=stanford-crfm/BioMedLM \
+    --enable-huggingface-models stanford-crfm/BioMedLM \
+    --suite v1 \
+    --max-eval-instances 10
+
+helm-run \
+    --run-specs boolq:model=mistralai/Mistral-7B-v0.1 \
+    --enable-huggingface-models mistralai/Mistral-7B-v0.1 \
+    --suite v1 \
+    --max-eval-instances 10
+
+
+
+helm-run --conf-paths run_specs.conf --suite v1 --max-eval-instances 1 --local --mongo-uri mongodb://127.0.0.1:27017/helmdb --enable-huggingface-models stanford-crfm/BioMedLM
+# Writing 2803 characters to benchmark_output/runs/v1/boolq:model=stanford-crfm_BioMedLM/run_spec.json
+#     Writing 272 characters to benchmark_output/runs/v1/boolq:model=stanford-crfm_BioMedLM/scenario.json
+#     Writing 4764 characters to benchmark_output/runs/v1/boolq:model=stanford-crfm_BioMedLM/scenario_state.json
+#     Writing 23457 characters to benchmark_output/runs/v1/boolq:model=stanford-crfm_BioMedLM/stats.json
+#     Writing 6430 characters to benchmark_output/runs/v1/boolq:model=stanford-crfm_BioMedLM/per_instance_stats.json
+
+
+helm-run --conf-paths run_specs.conf --suite v1 --max-eval-instances 1 --local --mongo-uri mongodb://127.0.0.1:27017/helmdb --enable-huggingface-models mistralai/Mistral-7B-v0.1
+
+
+helm-run --conf-paths run_specs.conf --suite v1 --max-eval-instances 1 \
+  --mongo-uri mongodb://127.0.0.1:27017/helmdb --enable-huggingface-models state-spaces/mamba-130m
+
+
+helm-run --run-specs boolq:model=mistralai/Mistral-7B-v0.1 --suite v1 --max-eval-instances 10 --enable-huggingface-models mistralai/Mistral-7B-v0.1
+helm-run --run-specs boolq:mistralai/Mixtral-8x7B-Instruct-v0.1 --suite v1 --max-eval-instances 10 --enable-huggingface-models mistralai/Mixtral-8x7B-Instruct-v0.1
+
+
+
+
+
+model_deployment
+helm-run --run-specs mmlu:state-spaces/mamba-2.8b --suite v1 --max-eval-instances 10 --enable-huggingface-models state-spaces/mamba-2.8b
+helm-run --run-specs boolq:model=state-spaces/mamba-2.8b --suite v1 --max-eval-instances 10 --enable-huggingface-models state-spaces/mamba-2.8b
+helm-run --conf-paths run_specs.conf --suite v1 --max-eval-instances 10 --enable-huggingface-models state-spaces/mamba-130m
+
+
+helm-run --run-specs boolq:model=state-spaces/mamba-130m --suite v1 --max-eval-instances 10 --enable-huggingface-models state-spaces/mamba-130m
+
+helm-run --run-specs boolq:model=mistralai/Mistral-7B-v0.1 --suite v1 --max-eval-instances 10 --enable-huggingface-models mistralai/Mistral-7B-v0.1
+
+together/bloomz
+
+helm-run --run-specs mmlu:together/bloomz --suite v1 --max-eval-instances 10 --enable-huggingface-models together/bloomz
+
+huggingface/gpt2
+helm-run --run-specs boolq:model=gpt2 --suite v1 --max-eval-instances 10 --enable-huggingface-models gpt2
+
+
+
+
+helm-run --conf-paths run_specs.conf --suite v1 --max-eval-instances 10
+
+
+helm-summarize --suite v1

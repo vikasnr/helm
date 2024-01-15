@@ -810,6 +810,7 @@ $(function () {
       );
     });
     const predictionsPaths = runSpecs.map((runSpec) => {
+      console.log("runNameToSuite",runNameToSuite)
       return predictionsJsonUrl(
         getSuiteForRun(runNameToSuite, runSpec.name),
         runSpec.name,
